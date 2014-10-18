@@ -14,6 +14,7 @@ from tornado.httpclient import AsyncHTTPClient
 
 from joker import __version__
 from joker.handlers import BaseHandler
+from joker.handlers.schema import SchemaHandler
 from joker.config import Config
 
 
@@ -34,6 +35,7 @@ class JokerServer(Server):
     def get_handlers(self):
         handlers = [
             ('/version/?', VersionHandler),
+            ('/schema/?', SchemaHandler),
         ]
 
         return tuple(handlers)

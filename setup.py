@@ -56,6 +56,7 @@ joker is a json-schema powered Restful API Manager.
         'toredis',
         'pycurl',
         'ujson',
+        'jsonschema',
     ],
     extras_require={
         'tests': tests_require,
