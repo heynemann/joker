@@ -8,7 +8,26 @@
 # http://www.opensource.org/licenses/MIT-license
 # Copyright (c) 2014 Bernardo Heynemann heynemann@gmail.com
 
-from unittest import TestCase as PythonTestCase
+from cow.testing import CowTestCase
+from tornado.httpclient import AsyncHTTPClient
 
-class TestCase(PythonTestCase):
-    pass
+from joker.config import Config
+from joker.server import JokerServer
+
+
+class ApiTestCase(CowTestCase):
+    def get_config(self):
+        return dict(
+            REDISHOST='localhost',
+            REDISPORT=4448
+        )
+
+    def get_server(self):
+        cfg = Config(**self.get_config())
+        self.server = JokerServer(config=cfg)
+        return self.server
+
+    def get_app(self):
+        app = super(ApiTestCase, self).get_app()
+        app.http_client = AsyncHTTPClient(self.io_loop)
+        return app

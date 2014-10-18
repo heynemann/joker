@@ -18,7 +18,7 @@ setup:
 	@pip install -U -e .\[tests\]
 
 # test your application (tests in the tests/ directory)
-test: mongo_test redis_test unit
+test: redis_test unit
 
 unit:
 	@coverage run --branch `which nosetests` -vv --with-yanc -s tests/
@@ -72,6 +72,9 @@ kill_mongo_test:
 
 run:
 	@joker -c ./joker/config/local.conf -vvv -d
+
+prod:
+	@joker -c ./joker/config/local.conf
 
 # run tests against all supported python versions
 tox:
