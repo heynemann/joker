@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# This file is part of joker.
+# this file is part of joker.
 # https://github.com/heynemann/joker
 
-# Licensed under the MIT license:
-# http://www.opensource.org/licenses/MIT-license
-# Copyright (c) 2014 Bernardo Heynemann heynemann@gmail.com
+# licensed under the mit license:
+# http://www.opensource.org/licenses/mit-license
+# copyright (c) 2014 bernardo heynemann heynemann@gmail.com
 
 from cow.server import Server
 from cow.plugins.redis_plugin import RedisPlugin
@@ -14,7 +14,7 @@ from tornado.httpclient import AsyncHTTPClient
 
 from joker import __version__
 from joker.handlers import BaseHandler
-from joker.handlers.schema import SchemaHandler
+from joker.handlers.middleware import MiddlewareHandler
 from joker.config import Config
 
 
@@ -32,11 +32,17 @@ class JokerServer(Server):
     def get_config(self):
         return Config
 
+    def get_routes(self):
+        return []
+
     def get_handlers(self):
         handlers = [
             ('/version/?', VersionHandler),
-            ('/schema/?', SchemaHandler),
         ]
+        for route in self.get_routes():
+            handlers.append((route[0], MiddlewareHandler, {
+                'middlewares': route[1]
+            }))
 
         return tuple(handlers)
 
