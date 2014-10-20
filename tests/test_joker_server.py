@@ -9,6 +9,7 @@
 # Copyright (c) 2014 Bernardo Heynemann heynemann@gmail.com
 
 from preggy import expect
+import tornado.gen.coroutine
 
 from joker import __version__
 from joker.middleware import Middleware
@@ -30,6 +31,7 @@ class JokerServerTestCase(ApiTestCase):
 
 
 class TestMiddleware(Middleware):
+    @tornado.gen.coroutine
     def process(self, app, handler, request, response):
         response.body.append('test')
         response.set_header('X-Server-Name', 'test-server.api.com')

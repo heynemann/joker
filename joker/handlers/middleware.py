@@ -8,6 +8,8 @@
 # http://www.opensource.org/licenses/MIT-license
 # Copyright (c) 2014 Bernardo Heynemann heynemann@gmail.com
 
+import tornado.web
+import tornado.gen
 from joker.middleware import Response
 from joker.handlers import BaseHandler
 
@@ -16,14 +18,17 @@ class MiddlewareHandler(BaseHandler):
     def initialize(self, middlewares):
         self.middlewares = middlewares
 
+    @tornado.web.asynchronous
+    @tornado.gen.coroutine
     def get(self):
         response = Response()
 
         for middleware_cls in self.middlewares:
             middleware = middleware_cls()
-            middleware.process(self.application, self, self.request, response)
+            yield middleware.process(self.application, self, self.request, response)
 
         for header_name, value in response.headers.items():
             self.set_header(header_name, value)
 
         self.write(''.join(response.body))
+        self.finish()

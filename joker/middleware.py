@@ -9,6 +9,9 @@
 # Copyright (c) 2014 Bernardo Heynemann heynemann@gmail.com
 
 
+import tornado.gen
+
+
 class Response(object):
     def __init__(self):
         self.headers = {}
@@ -20,5 +23,6 @@ class Response(object):
 
 
 class Middleware(object):
+    @tornado.gen.coroutine
     def process(self, app, handler, request, response):
         pass
