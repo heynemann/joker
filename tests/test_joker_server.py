@@ -60,3 +60,28 @@ class BasicMiddlewareTestCase(ApiTestCase):
         response = self.fetch('/test')
         expect(response.headers).to_include('X-Server-Name')
         expect(response.headers['X-Server-Name']).to_equal('test-server.api.com')
+
+
+class TestMiddleware2(Middleware):
+    @tornado.gen.coroutine
+    def process(self, app, handler, request, response):
+        response.body.append('test')
+        response.set_header('X-Server-Name', 'test-server.api.com')
+
+
+class LoadingFromConfigTestCase(ApiTestCase):
+    def get_server(self):
+        cfg_values = self.get_config()
+        cfg_values['ROUTES'] = [
+            ('/test-1', ('tests.test_joker_server.TestMiddleware2',))
+        ]
+        cfg = Config(**cfg_values)
+        self.server = JokerServer(
+            config=cfg
+        )
+        return self.server
+
+    def test_use_middleware(self):
+        response = self.fetch('/test-1')
+        expect(response.code).to_equal(200)
+        expect(response.body).to_be_like('test')

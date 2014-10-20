@@ -10,3 +10,10 @@
 
 
 from derpconf.config import Config  # NOQA
+
+Config.define(
+    'ROUTES',
+    [],
+    'List of routes using middlewares to include in this server',
+    'Routing'
+)

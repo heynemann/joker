@@ -16,6 +16,7 @@ from joker import __version__
 from joker.handlers import BaseHandler
 from joker.handlers.middleware import MiddlewareHandler
 from joker.config import Config
+from joker.importer import get_class
 
 
 def main():
@@ -33,15 +34,23 @@ class JokerServer(Server):
         return Config
 
     def get_routes(self):
-        return []
+        return self.config.ROUTES
 
     def get_handlers(self):
         handlers = [
             ('/version/?', VersionHandler),
         ]
         for route in self.get_routes():
+            middleware_classes = route[1]
+            result = []
+            for middleware_class in middleware_classes:
+                if isinstance(middleware_class, basestring):
+                    result.append(get_class(middleware_class))
+                else:
+                    result.append(middleware_class)
+
             handlers.append((route[0], MiddlewareHandler, {
-                'middlewares': route[1]
+                'middlewares': result
             }))
 
         return tuple(handlers)
