@@ -9,7 +9,7 @@
 # Copyright (c) 2014 Bernardo Heynemann heynemann@gmail.com
 
 from preggy import expect
-import tornado.gen.coroutine
+import tornado.gen
 
 from joker import __version__
 from joker.middleware import Middleware
