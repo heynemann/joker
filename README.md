@@ -10,5 +10,5 @@ Using VIM for Joker Development
 In order to develop joker with VIM, just set these two configurations in your
 .vimrc file:
 
-		set exrc
-		set secure
+	set exrc
+	set secure
