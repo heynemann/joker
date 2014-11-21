@@ -1,3 +1,0 @@
-// the configured options and settings for Joker
-#define Joker_VERSION_MAJOR @Joker_VERSION_MAJOR@
-#define Joker_VERSION_MINOR @Joker_VERSION_MINOR@
